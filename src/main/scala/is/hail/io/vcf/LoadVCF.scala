@@ -138,7 +138,7 @@ object LoadVCF {
 
   def lineVariant(s: String): Variant = {
     val Array(contig, start, id, ref, alts, rest) = s.split("\t", 6)
-    Variant(contig, start.toInt, ref, alts.split(","))
+    Variant(contig.replace("chr", ""), start.toInt, ref, alts.split(","))
   }
 
   def headerNumberToString(line: VCFCompoundHeaderLine): String = line.getCountType match {
@@ -158,7 +158,7 @@ object LoadVCF {
   }
 
   def headerField(line: VCFCompoundHeaderLine, i: Int, genericGenotypes: Boolean = false, callFields: Set[String] = Set.empty[String]): Field = {
-    val id = line.getID
+    val id = line.getID.replace("chr", "")
     val isCall = genericGenotypes && (id == "GT" || callFields.contains(id))
 
     val baseType = (line.getType, isCall) match {
@@ -225,7 +225,7 @@ object LoadVCF {
       .getFilterLines
       .toList
       // (filter, description)
-      .map(line => (line.getID, ""))
+      .map(line => (line.getID.replace("chr", ""), ""))
       .toMap
 
     val infoHeader = header.getInfoHeaderLines
@@ -314,7 +314,7 @@ object LoadVCF {
               reportAcc += VCFReport.RefNonACGTN
               None
             } else {
-              val vc = codec.decode(line)
+              val vc = codec.decode(if (line.startsWith("chr")) line.substring(3, line.length) else line)
               if (vc.isSymbolic) {
                 reportAcc += VCFReport.Symbolic
                 None

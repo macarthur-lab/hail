@@ -43,7 +43,7 @@ abstract class HtsjdkRecordReader[T] extends Serializable {
       vcID
 
     val ref = vc.getReference.getBaseString
-    val v = Variant(vc.getContig,
+    val v = Variant(vc.getContig.replace("chr", ""),
       vc.getStart,
       ref,
       vc.getAlternateAlleles.iterator.asScala.map(a => {
