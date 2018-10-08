@@ -134,7 +134,7 @@ dependencies {
     compile('org.apache.spark:spark-core_' + scalaMajorVersion + ':' + sparkVersion) {
         exclude module: 'hadoop-client'
     }
-    compile('org.apache.hadoop:hadoop-client:2.7.1') {
+    compile('org.apache.hadoop:hadoop-client:2.8.2') {
         exclude module: 'servlet-api'
     }
     compile 'org.apache.spark:spark-sql_' + scalaMajorVersion + ':' + sparkVersion
